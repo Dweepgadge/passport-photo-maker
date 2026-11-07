@@ -4,20 +4,21 @@ from PIL import Image, ImageDraw, ImageColor
 import numpy as np
 
 try:
-    from rembg import remove as rembg_remove
+    import rembg
+    rembg_session = rembg.new_session("u2netp")
     REMBG_AVAILABLE = True
-except ImportError:
+except Exception as e:
+    rembg_session = None
     REMBG_AVAILABLE = False
 
 
 def remove_background(image_bytes: bytes) -> Image.Image:
     """
-    Remove background from an image using rembg, returning an RGBA PIL Image.
-    If rembg is not installed, returns the original image in RGBA.
+    Remove background from an image using lightweight u2netp model (4.5 MB).
     """
     input_image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
-    if REMBG_AVAILABLE:
-        output_image = rembg_remove(input_image)
+    if REMBG_AVAILABLE and rembg_session:
+        output_image = rembg.remove(input_image, session=rembg_session)
         return output_image
     return input_image
 

@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt onnxruntime
 
-# Pre-download the AI model into container so it starts up instantly
-RUN python -c "import rembg; from PIL import Image; rembg.remove(Image.new('RGB', (10, 10), (255, 255, 255)))"
+# Pre-download lightweight AI model (4.5 MB) into container
+RUN python -c "import rembg; rembg.new_session('u2netp')"
 
 # Copy all application code and assets
 COPY . .
